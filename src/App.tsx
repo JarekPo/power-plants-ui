@@ -1,13 +1,11 @@
 import React from 'react';
 
-import logo from './logo.svg';
-
 import './App.css';
 
 const App = () => {
   return (
     <>
-      <h3>Power Plants</h3>
+      <h3 className='text-3xl font-bold underline'>Power Plants</h3>
     </>
   );
 };

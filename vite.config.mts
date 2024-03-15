@@ -1,10 +1,11 @@
 import react from '@vitejs/plugin-react-swc';
+import WindiCSS from 'vite-plugin-windicss';
 import {defineConfig} from 'vitest/config';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   base: '/',
-  plugins: [react()],
+  plugins: [react(), WindiCSS()],
   test: {
     globals: true,
     environment: 'jsdom',
