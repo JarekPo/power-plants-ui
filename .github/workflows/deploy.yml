@@ -4,7 +4,7 @@ name: Push-to-EC2
 on:
   push:
     branches:
-      - main
+      - main-remove-this-to-automate-deployment-to-EC2 # disable/enable deployment trigger
 
 jobs:
   deploy:
