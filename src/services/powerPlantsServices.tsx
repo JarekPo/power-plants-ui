@@ -11,9 +11,6 @@ export const getPowerPlantsData = async () => {
 };
 
 export const getCountryPlants = async (country: string) => {
-  const params = {
-    country: country,
-  };
   try {
     const {data, status} = await powerPlantsBackendInstance.get('country-plants', {
       params: {
