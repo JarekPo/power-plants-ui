@@ -16,6 +16,7 @@ const OverviewMap = () => {
   const [coordinates, setCoordintes] = useState<Point>(MAP_CENTER);
   const [tooltipPosition, setTooltipPosition] = useState<Point | null>(null);
   const [tooltipData, setTooltipData] = useState<PlantData | null>(null);
+  const [selectedMarker, setSelectedMarker] = useState<Point>(MAP_CENTER);
   const screenWidth = window.innerWidth;
 
   useEffect(() => {
@@ -41,6 +42,12 @@ const OverviewMap = () => {
   const handleMarkerClick = (e: {event: BaseSyntheticEvent<MouseEvent>; anchor: Point; payload: PlantData}) => {
     setTooltipPosition(e.anchor);
     setTooltipData(e.payload);
+    setSelectedMarker(e.anchor);
+  };
+
+  const handleMapClick = () => {
+    setTooltipPosition(null);
+    setSelectedMarker(MAP_CENTER);
   };
 
   return (
@@ -56,11 +63,11 @@ const OverviewMap = () => {
         attribution={false}
         width={screenWidth}
         metaWheelZoom={true}
-        onClick={() => setTooltipPosition(null)}
+        onClick={handleMapClick}
       >
         {mapData.map((plant: PlantData) => (
           <Marker
-            width={25}
+            width={selectedMarker[0] === plant.latitude && selectedMarker[1] === plant.longitude ? 30 : 25}
             anchor={[plant.latitude, plant.longitude]}
             key={plant.id}
             payload={plant}
@@ -68,7 +75,7 @@ const OverviewMap = () => {
           />
         ))}
         {tooltipPosition && (
-          <Overlay anchor={tooltipPosition} offset={[60, -10]}>
+          <Overlay anchor={tooltipPosition} offset={[60, -5]}>
             <CustomTooltip payload={tooltipData} />
           </Overlay>
         )}

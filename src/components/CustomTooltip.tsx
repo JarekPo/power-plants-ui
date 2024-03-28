@@ -8,11 +8,11 @@ interface CustomTooltipProps {
 
 const CustomTooltip = ({payload}: CustomTooltipProps) => {
   return (
-    <div style={{backgroundColor: 'white', padding: '5px', borderRadius: '5px', width: '80px'}}>
-      Name: {payload?.name}
-      <br />
-      Capacity: {payload?.capacity_mw}
-    </div>
+    <figure className='flex-col mx-auto bg-slate-100 rounded-xl p-3 opacity-75'>
+      <div className='mx-auto font-bold text-veryDarkgreen'>{payload?.name}</div>
+      <div className='text-sm font-semibold'>Primary Fuel: {payload?.primary_fuel}</div>
+      <div className='text-sm font-semibold'>Capacity: {payload?.capacity_mw} MW</div>
+    </figure>
   );
 };
 
