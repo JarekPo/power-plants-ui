@@ -1,17 +1,22 @@
-import React, {useEffect, useState} from 'react';
+import React, {BaseSyntheticEvent, useEffect, useState} from 'react';
 
-import {Map, Marker} from 'pigeon-maps';
+import {Map, Marker, Overlay, Point} from 'pigeon-maps';
 import {osm} from 'pigeon-maps/providers';
 
+import {MAP_CENTER} from '../constants/constants';
 import {getCountryNameByCity} from '../services/geonamesServices';
 import {getCountryPlants} from '../services/powerPlantsServices';
 import {PlantData} from '../types/types';
+import CustomTooltip from './CustomTooltip';
 import {getTimezoneCity} from './OverviewMapUtils';
 
 const OverviewMap = () => {
   const [mapData, setMapData] = useState<PlantData[]>([]);
   const [country, setCountry] = useState('');
-  const [coordinates, setCoordintes] = useState<[number, number]>([50.54114, 22.72204]);
+  const [coordinates, setCoordintes] = useState<Point>(MAP_CENTER);
+  const [tooltipPosition, setTooltipPosition] = useState<Point | null>(null);
+  const [tooltipData, setTooltipData] = useState<PlantData | null>(null);
+  const [selectedMarker, setSelectedMarker] = useState<Point>(MAP_CENTER);
   const screenWidth = window.innerWidth;
 
   useEffect(() => {
@@ -34,6 +39,17 @@ const OverviewMap = () => {
     setMapData(data);
   };
 
+  const handleMarkerClick = (e: {event: BaseSyntheticEvent<MouseEvent>; anchor: Point; payload: PlantData}) => {
+    setTooltipPosition(e.anchor);
+    setTooltipData(e.payload);
+    setSelectedMarker(e.anchor);
+  };
+
+  const handleMapClick = () => {
+    setTooltipPosition(null);
+    setSelectedMarker(MAP_CENTER);
+  };
+
   return (
     <>
       <Map
@@ -41,16 +57,28 @@ const OverviewMap = () => {
         height={'90vh'}
         defaultCenter={coordinates}
         center={coordinates}
-        defaultZoom={4}
+        defaultZoom={3}
+        zoom={6}
         dprs={[1, 2]}
         attribution={false}
         width={screenWidth}
         metaWheelZoom={true}
+        onClick={handleMapClick}
       >
-        <Marker width={25} anchor={[25, 0]} />
-        {mapData.map((plant: PlantData, index: number) => (
-          <Marker width={25} anchor={[plant.latitude, plant.longitude]} key={plant.id} />
+        {mapData.map((plant: PlantData) => (
+          <Marker
+            width={selectedMarker[0] === plant.latitude && selectedMarker[1] === plant.longitude ? 30 : 25}
+            anchor={[plant.latitude, plant.longitude]}
+            key={plant.id}
+            payload={plant}
+            onClick={handleMarkerClick}
+          />
         ))}
+        {tooltipPosition && (
+          <Overlay anchor={tooltipPosition} offset={[60, -5]}>
+            <CustomTooltip payload={tooltipData} />
+          </Overlay>
+        )}
       </Map>
     </>
   );
