@@ -4,7 +4,7 @@ import {Map, Marker, Overlay, Point} from 'pigeon-maps';
 import {osm} from 'pigeon-maps/providers';
 
 import {MAP_CENTER} from '../constants/constants';
-import {getCountryNameByCity} from '../services/geonamesServices';
+import {getCountryByCoordinates, getCountryNameByCity} from '../services/geonamesServices';
 import {getCountryPlants} from '../services/powerPlantsServices';
 import {PlantData} from '../types/types';
 import CustomTooltip from './CustomTooltip';
@@ -18,6 +18,7 @@ const OverviewMap = () => {
   const [tooltipData, setTooltipData] = useState<PlantData | null>(null);
   const [selectedMarker, setSelectedMarker] = useState<Point>(MAP_CENTER);
   const screenWidth = window.innerWidth;
+  const [selectedMarkerLatitude, selectedMarkerLongitude] = selectedMarker;
 
   useEffect(() => {
     getCountryName();
@@ -31,8 +32,15 @@ const OverviewMap = () => {
 
   const getCountryName = async () => {
     const countryDeatils = await getCountryNameByCity(getTimezoneCity());
+    if (!countryDeatils) return;
     setCountry(countryDeatils.geonames[0].countryName);
     setCoordintes([countryDeatils.geonames[0].lat, countryDeatils.geonames[0].lng]);
+  };
+
+  const getCountryNameByCoordinates = async (coordinates: Point) => {
+    const countryDetails = await getCountryByCoordinates(coordinates);
+    if (!countryDetails) return;
+    setCountry(countryDetails.geonames[0].countryName);
   };
   const getPlantsData = async (country: string) => {
     const data = await getCountryPlants(country);
@@ -45,9 +53,11 @@ const OverviewMap = () => {
     setSelectedMarker(e.anchor);
   };
 
-  const handleMapClick = () => {
+  const handleMapClick = (e: {event: MouseEvent; latLng: Point; pixel: [number, number]}) => {
     setTooltipPosition(null);
     setSelectedMarker(MAP_CENTER);
+    getCountryNameByCoordinates(e.latLng);
+    setCoordintes(e.latLng);
   };
 
   return (
@@ -67,7 +77,7 @@ const OverviewMap = () => {
       >
         {mapData.map((plant: PlantData) => (
           <Marker
-            width={selectedMarker[0] === plant.latitude && selectedMarker[1] === plant.longitude ? 30 : 25}
+            width={selectedMarkerLatitude === plant.latitude && selectedMarkerLongitude === plant.longitude ? 30 : 25}
             anchor={[plant.latitude, plant.longitude]}
             key={plant.id}
             payload={plant}
@@ -75,7 +85,7 @@ const OverviewMap = () => {
           />
         ))}
         {tooltipPosition && (
-          <Overlay anchor={tooltipPosition} offset={[60, -5]}>
+          <Overlay anchor={tooltipPosition} offset={[60, 140]}>
             <CustomTooltip payload={tooltipData} />
           </Overlay>
         )}
