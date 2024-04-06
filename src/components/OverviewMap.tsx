@@ -5,14 +5,17 @@ import {osm} from 'pigeon-maps/providers';
 
 import {INITIAL_ZOOM, MAP_CENTER} from '../constants/constants';
 import {getCountryByCoordinates, getCountryNameByCity} from '../services/geonamesServices';
-import {getCountryPlants} from '../services/powerPlantsServices';
-import {PlantData} from '../types/types';
+import {getCountriesSummary, getCountryPlants} from '../services/powerPlantsServices';
+import {CountriesSummaryData, PlantData} from '../types/types';
+import CountryCard from './CountryCard';
 import CustomTooltip from './CustomTooltip';
 import {getTimezoneCity} from './OverviewMapUtils';
 
 const OverviewMap = () => {
   const [mapData, setMapData] = useState<PlantData[]>([]);
   const [country, setCountry] = useState('');
+  const [countriesSummary, setCountriesSummary] = useState<CountriesSummaryData[]>([]);
+  const [selectedCountrySummary, setSelectedCountrySummary] = useState<CountriesSummaryData>();
   const [coordinates, setCoordintes] = useState<Point>(MAP_CENTER);
   const [tooltipPosition, setTooltipPosition] = useState<Point | null>(null);
   const [tooltipData, setTooltipData] = useState<PlantData | null>(null);
@@ -23,11 +26,20 @@ const OverviewMap = () => {
 
   useEffect(() => {
     getCountryName();
+    getSummaryData();
   }, []);
 
   useEffect(() => {
     if (country) {
       getPlantsData(country);
+
+      if (countriesSummary.length) {
+        const selectedCountryData = countriesSummary.find((selectedCountry: CountriesSummaryData) => {
+          const countryData = selectedCountry.country_long === country;
+          return countryData;
+        });
+        setSelectedCountrySummary(selectedCountryData);
+      }
     }
   }, [country]);
 
@@ -46,6 +58,11 @@ const OverviewMap = () => {
   const getPlantsData = async (country: string) => {
     const data = await getCountryPlants(country);
     setMapData(data);
+  };
+
+  const getSummaryData = async () => {
+    const data = await getCountriesSummary();
+    setCountriesSummary(data);
   };
 
   const handleMarkerClick = (e: {event: BaseSyntheticEvent<MouseEvent>; anchor: Point; payload: PlantData}) => {
@@ -93,10 +110,10 @@ const OverviewMap = () => {
               <CustomTooltip payload={tooltipData} />
             </Overlay>
           )}
-          <ZoomControl style={{top: 10, left: 10}} />
         </Map>
-        <div className='absolute top-0 left-0'>
-          <div>card</div>
+        <div className='flex flex-row absolute top-0 left-0'>
+          {selectedCountrySummary && <CountryCard countryData={selectedCountrySummary} />}
+          <ZoomControl style={{position: 'relative'}} />
         </div>
       </main>
     </>

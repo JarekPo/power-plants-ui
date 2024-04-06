@@ -9,3 +9,9 @@ export interface PlantData {
   longitude: number;
   id: number;
 }
+
+export interface CountriesSummaryData {
+  country_long: string;
+  plants_number: number;
+  total_capacity: number;
+}
