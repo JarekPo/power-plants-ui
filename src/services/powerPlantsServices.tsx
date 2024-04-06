@@ -23,3 +23,13 @@ export const getCountryPlants = async (country: string) => {
     return [];
   }
 };
+
+export const getCountriesSummary = async () => {
+  try {
+    const {data, status} = await powerPlantsBackendInstance.get('countries-summary');
+    return data;
+  } catch (error) {
+    console.error('Could not fetch summary data.', error);
+    return [];
+  }
+};
