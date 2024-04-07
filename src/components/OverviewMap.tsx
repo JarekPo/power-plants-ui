@@ -90,7 +90,7 @@ const OverviewMap = () => {
           defaultZoom={INITIAL_ZOOM / 2}
           zoom={zoom}
           dprs={[1, 2]}
-          attributionPrefix={'Power Plants'}
+          attributionPrefix={<span>Power Plants</span>}
           width={screenWidth}
           metaWheelZoom={true}
           zoomSnap={false}
