@@ -21,6 +21,7 @@ const OverviewMap = () => {
   const [tooltipData, setTooltipData] = useState<PlantData | null>(null);
   const [selectedMarker, setSelectedMarker] = useState<Point>(MAP_CENTER);
   const screenWidth = window.innerWidth;
+  const screenHeight = window.innerHeight;
   const [selectedMarkerLatitude, selectedMarkerLongitude] = selectedMarker;
   const [zoom, setZoom] = useState(INITIAL_ZOOM);
 
@@ -41,7 +42,7 @@ const OverviewMap = () => {
         setSelectedCountrySummary(selectedCountryData);
       }
     }
-  }, [country]);
+  }, [country, countriesSummary]);
 
   const getCountryName = async () => {
     const countryDeatils = await getCountryNameByCity(getTimezoneCity());
@@ -84,7 +85,7 @@ const OverviewMap = () => {
       <main className='relative'>
         <Map
           provider={osm}
-          height={'90vh'}
+          height={screenHeight - 100}
           defaultCenter={coordinates}
           center={coordinates}
           defaultZoom={INITIAL_ZOOM / 2}
@@ -99,6 +100,11 @@ const OverviewMap = () => {
           {mapData.map((plant: PlantData) => (
             <Marker
               width={selectedMarkerLatitude === plant.latitude && selectedMarkerLongitude === plant.longitude ? 30 : 25}
+              color={
+                selectedMarkerLatitude === plant.latitude && selectedMarkerLongitude === plant.longitude
+                  ? 'darkOrange'
+                  : undefined
+              }
               anchor={[plant.latitude, plant.longitude]}
               key={plant.id}
               payload={plant}
