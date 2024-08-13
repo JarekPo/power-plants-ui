@@ -54,7 +54,7 @@ const OverviewMap = () => {
   const getCountryNameByCoordinates = async (coordinates: Point) => {
     const countryDetails = await getCountryByCoordinates(coordinates);
     if (!countryDetails) return;
-    setCountry(countryDetails.geonames[0].countryName);
+    setCountry(countryDetails.country_name);
   };
   const getPlantsData = async (country: string) => {
     const data = await getCountryPlants(country);

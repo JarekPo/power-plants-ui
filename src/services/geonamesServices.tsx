@@ -1,6 +1,6 @@
 import {Point} from 'pigeon-maps';
 
-import {geonamesInstance} from './instances';
+import {geonamesInstance, powerPlantsBackendInstance} from './instances';
 
 export const getCountryNameByCity = async (city: string) => {
   try {
@@ -20,11 +20,10 @@ export const getCountryNameByCity = async (city: string) => {
 export const getCountryByCoordinates = async (coordinates: Point) => {
   try {
     const [latitude, longitude] = coordinates;
-    const {data, status} = await geonamesInstance.get('findNearbyPlaceNameJSON', {
+    const {data, status} = await powerPlantsBackendInstance.get('geonames', {
       params: {
-        lat: latitude,
-        lng: longitude,
-        username: import.meta.env.VITE_GEONAMES_USERNAME,
+        latitude: latitude,
+        longitude: longitude,
       },
     });
     return data;
