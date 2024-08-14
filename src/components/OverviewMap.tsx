@@ -47,8 +47,8 @@ const OverviewMap = () => {
   const getCountryName = async () => {
     const countryDeatils = await getCountryNameByCity(getTimezoneCity());
     if (!countryDeatils) return;
-    setCountry(countryDeatils.geonames[0].countryName);
-    setCoordintes([countryDeatils.geonames[0].lat, countryDeatils.geonames[0].lng]);
+    setCountry(countryDeatils.country_name);
+    setCoordintes([countryDeatils.latitude, countryDeatils.longitude]);
   };
 
   const getCountryNameByCoordinates = async (coordinates: Point) => {

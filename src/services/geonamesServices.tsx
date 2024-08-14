@@ -1,13 +1,12 @@
 import {Point} from 'pigeon-maps';
 
-import {geonamesInstance, powerPlantsBackendInstance} from './instances';
+import {powerPlantsBackendInstance} from './instances';
 
 export const getCountryNameByCity = async (city: string) => {
   try {
-    const {data, status} = await geonamesInstance.get('searchJSON', {
+    const {data, status} = await powerPlantsBackendInstance.get('geonames/search-country', {
       params: {
         name: encodeURIComponent(city),
-        username: import.meta.env.VITE_GEONAMES_USERNAME,
       },
     });
     return data;
