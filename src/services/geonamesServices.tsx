@@ -1,13 +1,12 @@
 import {Point} from 'pigeon-maps';
 
-import {geonamesInstance} from './instances';
+import {powerPlantsBackendInstance} from './instances';
 
 export const getCountryNameByCity = async (city: string) => {
   try {
-    const {data, status} = await geonamesInstance.get('searchJSON', {
+    const {data, status} = await powerPlantsBackendInstance.get('geonames/search-country', {
       params: {
         name: encodeURIComponent(city),
-        username: import.meta.env.VITE_GEONAMES_USERNAME,
       },
     });
     return data;
@@ -20,11 +19,10 @@ export const getCountryNameByCity = async (city: string) => {
 export const getCountryByCoordinates = async (coordinates: Point) => {
   try {
     const [latitude, longitude] = coordinates;
-    const {data, status} = await geonamesInstance.get('findNearbyPlaceNameJSON', {
+    const {data, status} = await powerPlantsBackendInstance.get('geonames', {
       params: {
-        lat: latitude,
-        lng: longitude,
-        username: import.meta.env.VITE_GEONAMES_USERNAME,
+        latitude: latitude,
+        longitude: longitude,
       },
     });
     return data;
