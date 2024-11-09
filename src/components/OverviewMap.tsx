@@ -9,7 +9,7 @@ import {getCountriesSummary, getCountryPlants} from '../services/powerPlantsServ
 import {CountriesSummaryData, PlantData} from '../types/types';
 import CountryCard from './CountryCard';
 import CustomTooltip from './CustomTooltip';
-import {getTimezoneCity} from './OverviewMapUtils';
+import {getTimezoneCity} from './overviewMapUtils';
 
 const OverviewMap = () => {
   const [mapData, setMapData] = useState<PlantData[]>([]);
