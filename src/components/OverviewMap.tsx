@@ -116,10 +116,10 @@ const OverviewMap = () => {
               <CustomTooltip payload={tooltipData} />
             </Overlay>
           )}
+          <ZoomControl style={{position: 'absolute', top: 8, left: 244}} />
         </Map>
         <div className='flex flex-row absolute top-0 left-0'>
           {selectedCountrySummary && <CountryCard countryData={selectedCountrySummary} />}
-          <ZoomControl style={{position: 'relative'}} />
         </div>
       </main>
     </>
