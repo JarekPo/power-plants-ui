@@ -1,7 +1,16 @@
 const Attribution = () => {
   return (
     <div className='text-center text-xs'>
-      Power Stations dataset by
+      Project autor{' '}
+      <a
+        className='hover:underline text-sky-600 font-medium'
+        href='https://github.com/JarekPo'
+        rel='noopener noreferrer'
+        target='_blank'
+      >
+        Jarek Polowy
+      </a>
+      . | Power Stations dataset by{' '}
       <a
         className='hover:underline'
         href='https://datasets.wri.org/'
