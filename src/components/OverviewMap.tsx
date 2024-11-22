@@ -92,7 +92,6 @@ const OverviewMap = () => {
           zoom={zoom}
           dprs={[1, 2]}
           attributionPrefix={<span>Power Plants</span>}
-          width={screenWidth}
           metaWheelZoom={true}
           zoomSnap={false}
           onClick={handleMapClick}
