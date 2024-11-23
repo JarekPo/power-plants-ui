@@ -9,6 +9,7 @@ import {getCountriesSummary, getCountryPlants} from '../services/powerPlantsServ
 import {CountriesSummaryData, PlantData} from '../types/types';
 import CountryCard from './CountryCard';
 import CustomTooltip from './CustomTooltip';
+import LoadingBar from './LoadingBar';
 import {getTimezoneCity} from './overviewMapUtils';
 
 const OverviewMap = () => {
@@ -24,6 +25,7 @@ const OverviewMap = () => {
   const screenHeight = window.innerHeight;
   const [selectedMarkerLatitude, selectedMarkerLongitude] = selectedMarker;
   const [zoom, setZoom] = useState(INITIAL_ZOOM);
+  const [isLoading, setIsLoadin] = useState(false);
 
   useEffect(() => {
     getCountryName();
@@ -57,8 +59,10 @@ const OverviewMap = () => {
     setCountry(countryDetails.country_name);
   };
   const getPlantsData = async (country: string) => {
+    setIsLoadin(true);
     const data = await getCountryPlants(country);
     setMapData(data);
+    setIsLoadin(false);
   };
 
   const getSummaryData = async () => {
@@ -82,6 +86,7 @@ const OverviewMap = () => {
 
   return (
     <>
+      {isLoading && <LoadingBar />}
       <main className='relative'>
         <Map
           provider={osm}
