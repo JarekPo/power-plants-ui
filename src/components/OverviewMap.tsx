@@ -11,6 +11,7 @@ import CountryCard from './CountryCard';
 import CustomTooltip from './CustomTooltip';
 import LoadingBar from './LoadingBar';
 import {getTimezoneCity} from './overviewMapUtils';
+import ResetButton from './ResetButton';
 
 const OverviewMap = () => {
   const [mapData, setMapData] = useState<PlantData[]>([]);
@@ -26,6 +27,7 @@ const OverviewMap = () => {
   const [selectedMarkerLatitude, selectedMarkerLongitude] = selectedMarker;
   const [zoom, setZoom] = useState(INITIAL_ZOOM);
   const [isLoading, setIsLoadin] = useState(false);
+  const [mapKey, setMapKey] = useState(0);
 
   useEffect(() => {
     getCountryName();
@@ -84,11 +86,17 @@ const OverviewMap = () => {
     setZoom(0);
   };
 
+  const resetMapZoom = () => {
+    setZoom(INITIAL_ZOOM);
+    setMapKey((prevKey) => prevKey + 1);
+  };
+
   return (
     <>
       {isLoading && <LoadingBar />}
       <main className='relative'>
         <Map
+          key={mapKey}
           provider={osm}
           height={screenHeight - 100}
           defaultCenter={coordinates}
@@ -120,8 +128,11 @@ const OverviewMap = () => {
               <CustomTooltip payload={tooltipData} />
             </Overlay>
           )}
-          <ZoomControl style={{position: 'absolute', top: 8, left: 244}} />
+          <ZoomControl style={{position: 'absolute', top: 8, left: 264}} />
         </Map>
+        <div style={{position: 'absolute', top: 66, left: 264}} onClick={resetMapZoom}>
+          <ResetButton />
+        </div>
         <div className='flex flex-row absolute top-0 left-0'>
           {selectedCountrySummary && <CountryCard countryData={selectedCountrySummary} />}
         </div>

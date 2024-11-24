@@ -1,7 +1,7 @@
 const Attribution = () => {
   return (
     <div className='text-center text-xs'>
-      Project autor{' '}
+      Project by{' '}
       <a
         className='hover:underline text-sky-600 font-medium'
         href='https://github.com/JarekPo'
@@ -9,17 +9,17 @@ const Attribution = () => {
         target='_blank'
       >
         Jarek Polowy
-      </a>
-      . | Power Stations dataset by{' '}
+      </a>{' '}
+      | Power Stations dataset by{' '}
       <a
         className='hover:underline'
         href='https://datasets.wri.org/'
         rel='nofollow noopener noreferrer'
         target='_blank'
       >
-        WRI
+        WRI{' '}
       </a>
-      . | We use the{' '}
+      | We use the{' '}
       <a
         className='hover:underline'
         href='https://www.geonames.org/'
@@ -37,7 +37,6 @@ const Attribution = () => {
       >
         Creative Commons License
       </a>
-      .
     </div>
   );
 };
