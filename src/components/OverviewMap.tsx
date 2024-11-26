@@ -52,7 +52,7 @@ const OverviewMap = () => {
     const countryDeatils = await getCountryNameByCity(getTimezoneCity());
     if (!countryDeatils) return;
     setCountry(countryDeatils.country_name);
-    setCoordintes([countryDeatils.latitude, countryDeatils.longitude]);
+    setCoordintes([parseFloat(countryDeatils.latitude), parseFloat(countryDeatils.longitude)]);
   };
 
   const getCountryNameByCoordinates = async (coordinates: Point) => {
@@ -83,11 +83,9 @@ const OverviewMap = () => {
     setSelectedMarker(MAP_CENTER);
     getCountryNameByCoordinates(e.latLng);
     setCoordintes(e.latLng);
-    setZoom(0);
   };
 
   const resetMapZoom = () => {
-    setZoom(INITIAL_ZOOM);
     setMapKey((prevKey) => prevKey + 1);
   };
 
