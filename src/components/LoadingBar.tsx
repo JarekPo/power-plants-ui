@@ -1,27 +1,21 @@
 import React, {useEffect, useState} from 'react';
 
+import {generateRandomProgress, generateRandomTime} from './loadingBarUtils';
+
 const LoadingBar = () => {
   const [progress, setProgress] = useState(0);
 
+  const updateProgress = () => {
+    setProgress((prevProgress) => {
+      const newProgress = prevProgress + generateRandomProgress();
+      if (newProgress >= 100) {
+        return 100;
+      }
+      return newProgress;
+    });
+  };
+
   useEffect(() => {
-    const generateRandomProgress = () => {
-      return Math.floor(Math.random() * 30) + 10;
-    };
-
-    const generateRandomTime = () => {
-      return Math.floor(Math.random() * 300) + 100;
-    };
-
-    const updateProgress = () => {
-      setProgress((prevProgress) => {
-        const newProgress = prevProgress + generateRandomProgress();
-        if (newProgress >= 100) {
-          return 100;
-        }
-        return newProgress;
-      });
-    };
-
     const timer = setInterval(() => {
       updateProgress();
       if (progress >= 100) {
