@@ -26,7 +26,7 @@ const OverviewMap = () => {
   const screenHeight = window.innerHeight;
   const [selectedMarkerLatitude, selectedMarkerLongitude] = selectedMarker;
   const [zoom, setZoom] = useState(INITIAL_ZOOM);
-  const [isLoading, setIsLoadin] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [mapKey, setMapKey] = useState(0);
 
   useEffect(() => {
@@ -46,10 +46,12 @@ const OverviewMap = () => {
         setSelectedCountrySummary(selectedCountryData);
       }
     }
-  }, [country, countriesSummary]);
+  }, [country]);
 
   const getCountryName = async () => {
+    setIsLoading(true);
     const countryDeatils = await getCountryNameByCity(getTimezoneCity());
+    setIsLoading(false);
     if (!countryDeatils) return;
     setCountry(countryDeatils.country_name);
     setCoordintes([parseFloat(countryDeatils.latitude), parseFloat(countryDeatils.longitude)]);
@@ -61,15 +63,17 @@ const OverviewMap = () => {
     setCountry(countryDetails.country_name);
   };
   const getPlantsData = async (country: string) => {
-    setIsLoadin(true);
+    setIsLoading(true);
     const data = await getCountryPlants(country);
     setMapData(data);
-    setIsLoadin(false);
+    setIsLoading(false);
   };
 
   const getSummaryData = async () => {
+    setIsLoading(true);
     const data = await getCountriesSummary();
     setCountriesSummary(data);
+    setIsLoading(false);
   };
 
   const handleMarkerClick = (e: {event: BaseSyntheticEvent<MouseEvent>; anchor: Point; payload: PlantData}) => {
