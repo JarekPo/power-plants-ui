@@ -46,7 +46,7 @@ const OverviewMap = () => {
         setSelectedCountrySummary(selectedCountryData);
       }
     }
-  }, [country]);
+  }, [country, countriesSummary]);
 
   const getCountryName = async () => {
     setIsLoading(true);
